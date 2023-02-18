@@ -14,64 +14,80 @@ function clickViewListAccount() {
 }
 
 let accountList = [];
-let counter = 1;
 
-function Account(username, fullName, role, department) {
-  this.id = counter++;
+function Account(id, username, fullName, role, department) {
+  this.id = id;
   this.username = username;
   this.fullName = fullName;
   this.role = role;
   this.department = department;
 }
 
-function initAccount() {
-  if (null == accountList || accountList.length === 0) {
+function getListAccount() {
+  $.get(
+    "https://63ed06dee6ee53bbf58fa6e8.mockapi.io/Account",
+    function (data, status) {
+      accountList = [];
+
+      if (status == "error") {
+        alert("load data is fail");
+        return;
+      }
+      parseData(data);
+      fillAccountToTable();
+    }
+  );
+}
+
+function parseData(data) {
+  data.forEach(function (item) {
     accountList.push(
-      new Account("huytien", "Nguyễn Huy Tiến", "ADMIN", "Developer")
+      new Account(
+        item.id,
+        item.username,
+        item.fullName,
+        item.role,
+        item.department
+      )
     );
-    accountList.push(
-      new Account("hoangminh", "Hoang Minh", "MANAGER", "Developer")
+  });
+}
+
+function fillAccountToTable() {
+  accountList.forEach(function (item) {
+    $("tbody").append(
+      "<tr>" +
+        "<td>" +
+        item.id +
+        "</td>" +
+        "<td>" +
+        item.username +
+        "</td>" +
+        "<td>" +
+        item.fullName +
+        "</td>" +
+        "<td>" +
+        item.role +
+        "</td>" +
+        "<td>" +
+        item.department +
+        "</td>" +
+        "<td>" +
+        '<a class="edit" title="Edit" data-toggle="tooltip" onclick="openUpdateModal(' +
+        item.id +
+        ')"><i class="material-icons">&#xE254;</i></a>' +
+        '<a class="delete" title="Delete" data-toggle="tooltip" onclick="openComfiemDelete(' +
+        item.id +
+        ')"><i class="material-icons">&#xE872;</i></a>' +
+        "</td>" +
+        "</tr>"
     );
-    accountList.push(
-      new Account("thanhlinh", "Thanh Linh", "EMPLOYEE", "Developer")
-    );
-  }
+  });
 }
 
 function buildTable() {
-  setTimeout(function name(params) {
-    $("tbody").empty();
-    initAccount();
-    accountList.forEach(function (item) {
-      $("tbody").append(
-        "<tr>" +
-          "<td>" +
-          item.id +
-          "</td>" +
-          "<td>" +
-          item.username +
-          "</td>" +
-          "<td>" +
-          item.fullName +
-          "</td>" +
-          "<td>" +
-          item.role +
-          "</td>" +
-          "<td>" +
-          item.department +
-          "</td>" +
-          "<td>" +
-          '<a class="edit" title="Edit" data-toggle="tooltip" onclick="openUpdateModal(' +
-          item.id +
-          ')"><i class="material-icons">&#xE254;</i></a>' +
-          '<a class="delete" title="Delete" data-toggle="tooltip" onclick="openComfiemDelete(' +
-          item.id +
-          ')"><i class="material-icons">&#xE872;</i></a>' +
-          "</td>" +
-          "</tr>"
-      );
-    });
-  }, 500);
+  $("tbody").empty();
+  getListAccount();
 }
 
 function openAddModal() {
@@ -149,7 +165,7 @@ function updateAccount() {
 function openComfiemDelete(id) {
   let index = accountList.findIndex((x) => x.id == id);
 
-  let name = accountList[index].username;
+  let username = accountList[index].username;
 
   var result = confirm("Want to delete " + username + "?");
   if (result) {
