@@ -15,10 +15,12 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Phone</th>
-                        <th>Actions</th>
+                        <th scope="col" style="width: 6%;">Id</th>
+                        <th scope="col" style="width: auto;">Username</th>
+                        <th scope="col" style="width: 25%;">Full Name</th>
+                        <th scope="col" style="width: auto;">Role</th>
+                        <th scope="col" style="width: auto;">Department</th>
+                        <th scope="col" style="width: 15%;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,14 +44,17 @@
 
                         <input type="hidden" id="id" name="id">
 
-                        <label for="name"><b>Name</b></label>
-                        <input type="text" placeholder="name" name="name" id="name" required>
+                        <label for="name"><b>Username</b></label>
+                        <input type="text" placeholder="username" name="username" id="username" required>
 
-                        <label for="department"><b>Department</b></label>
+                        <label for="department"><b>Full Name</b></label>
+                        <input type="text" placeholder="full name" name="fullName" id="fullName" required>
+
+                        <label for="phone"><b>Role</b></label>
+                        <input type="text" placeholder="Role" name="role" id="role" required>
+
+                        <label for="phone"><b>Department</b></label>
                         <input type="text" placeholder="department" name="department" id="department" required>
-
-                        <label for="phone"><b>Phone</b></label>
-                        <input type="text" placeholder="phone number" name="phone" id="phone" required>
                     </div>
                 </div>
                 <!-- Footer -->

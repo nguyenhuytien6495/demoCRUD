@@ -14,25 +14,26 @@ function clickViewListAccount() {
 }
 
 let accountList = [];
-let counter = 0;
+let counter = 1;
 
-function Account(name, department, phone) {
+function Account(username, fullName, role, department) {
   this.id = counter++;
-  this.name = name;
+  this.username = username;
+  this.fullName = fullName;
+  this.role = role;
   this.department = department;
-  this.phone = phone;
 }
 
 function initAccount() {
   if (null == accountList || accountList.length === 0) {
     accountList.push(
-      new Account("John Doe", "Administration", "(171) 555-2222")
+      new Account("huytien", "Nguyễn Huy Tiến", "ADMIN", "Developer")
     );
     accountList.push(
-      new Account("Peter Parker", "Customer Service", "(313) 555-5735")
+      new Account("hoangminh", "Hoang Minh", "MANAGER", "Developer")
     );
     accountList.push(
-      new Account("Fran Wilson", "Human Resources", "(503) 555-9931")
+      new Account("thanhlinh", "Thanh Linh", "EMPLOYEE", "Developer")
     );
   }
 }
@@ -45,13 +46,19 @@ function buildTable() {
       $("tbody").append(
         "<tr>" +
           "<td>" +
-          item.name +
+          item.id +
+          "</td>" +
+          "<td>" +
+          item.username +
+          "</td>" +
+          "<td>" +
+          item.fullName +
+          "</td>" +
+          "<td>" +
+          item.role +
           "</td>" +
           "<td>" +
           item.department +
-          "</td>" +
-          "<td>" +
-          item.phone +
           "</td>" +
           "<td>" +
           '<a class="edit" title="Edit" data-toggle="tooltip" onclick="openUpdateModal(' +
@@ -74,9 +81,10 @@ function openAddModal() {
 
 function resetForm() {
   document.getElementById("id").value = "";
-  document.getElementById("name").value = "";
+  document.getElementById("username").value = "";
+  document.getElementById("fullName").value = "";
+  document.getElementById("role").value = "";
   document.getElementById("department").value = "";
-  document.getElementById("phone").value = "";
 }
 
 function openModal() {
@@ -88,11 +96,12 @@ function hideModal() {
 }
 
 function addAccount() {
-  let name = document.getElementById("name").value;
+  let username = document.getElementById("username").value;
+  let fullName = document.getElementById("fullName").value;
+  let role = document.getElementById("role").value;
   let department = document.getElementById("department").value;
-  let phone = document.getElementById("phone").value;
 
-  accountList.push(new Account(name, department, phone));
+  accountList.push(new Account(username, fullName, role, department));
 
   hideModal();
   buildTable();
@@ -102,9 +111,10 @@ function openUpdateModal(id) {
   let index = accountList.findIndex((x) => x.id == id);
 
   document.getElementById("id").value = accountList[index].id;
-  document.getElementById("name").value = accountList[index].name;
+  document.getElementById("username").value = accountList[index].username;
+  document.getElementById("fullName").value = accountList[index].fullName;
+  document.getElementById("role").value = accountList[index].role;
   document.getElementById("department").value = accountList[index].department;
-  document.getElementById("phone").value = accountList[index].phone;
 
   openModal();
 }
@@ -120,15 +130,17 @@ function save() {
 
 function updateAccount() {
   let id = document.getElementById("id").value;
-  let name = document.getElementById("name").value;
+  let username = document.getElementById("username").value;
+  let fullName = document.getElementById("fullName").value;
+  let role = document.getElementById("role").value;
   let department = document.getElementById("department").value;
-  let phone = document.getElementById("phone").value;
 
   let index = accountList.findIndex((x) => x.id == id);
 
-  accountList[index].name = name;
+  accountList[index].username = username;
+  accountList[index].fullName = fullName;
+  accountList[index].role = role;
   accountList[index].department = department;
-  accountList[index].phone = phone;
 
   hideModal();
   buildTable();
@@ -137,9 +149,9 @@ function updateAccount() {
 function openComfiemDelete(id) {
   let index = accountList.findIndex((x) => x.id == id);
 
-  let name = accountList[index].name;
+  let name = accountList[index].username;
 
-  var result = confirm("Want to delete " + name + "?");
+  var result = confirm("Want to delete " + username + "?");
   if (result) {
     deleteAccount(id);
   }
