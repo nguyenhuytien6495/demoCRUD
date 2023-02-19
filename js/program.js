@@ -117,10 +117,22 @@ function addAccount() {
   let role = document.getElementById("role").value;
   let department = document.getElementById("department").value;
 
-  accountList.push(new Account(username, fullName, role, department));
-
-  hideModal();
-  buildTable();
+  $.post(
+    "https://63ed06dee6ee53bbf58fa6e8.mockapi.io/Account",
+    {
+      username: username,
+      fullName: fullName,
+      role: role,
+      department: department,
+    },
+    function (data, status) {
+      if (status == "error") {
+        alert("Create is Fail!");
+      }
+      hideModal();
+      buildTable();
+    }
+  );
 }
 
 function openUpdateModal(id) {
@@ -151,12 +163,26 @@ function updateAccount() {
   let role = document.getElementById("role").value;
   let department = document.getElementById("department").value;
 
-  let index = accountList.findIndex((x) => x.id == id);
+  let account = {
+    username: username,
+    fullName: fullName,
+    role: role,
+    department: department,
+  };
 
-  accountList[index].username = username;
-  accountList[index].fullName = fullName;
-  accountList[index].role = role;
-  accountList[index].department = department;
+  $.ajax({
+    url: "https://63ed06dee6ee53bbf58fa6e8.mockapi.io/Account/" + id,
+    type: "PUT",
+    data: account,
+    success: function (result) {
+      // console.log(result);
+      if (result == null || result == undefined) {
+        alert("error when loading data");
+        return;
+      }
+      buildTable();
+    },
+  });
 
   hideModal();
   buildTable();
@@ -174,8 +200,16 @@ function openComfiemDelete(id) {
 }
 
 function deleteAccount(id) {
-  let index = accountList.findIndex((x) => x.id == id);
-  accountList.splice(index, 1);
-
-  buildTable();
+  $.ajax({
+    url: "https://63ed06dee6ee53bbf58fa6e8.mockapi.io/Account/" + id,
+    type: "DELETE",
+    success: function (result) {
+      // console.log(result);
+      if (result == null || result == undefined) {
+        alert("error when loading data");
+        return;
+      }
+      buildTable();
+    },
+  });
 }
